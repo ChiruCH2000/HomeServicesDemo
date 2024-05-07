@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- list_item_service.xml -->
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textView_service"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="12sp"
+    android:layout_margin="10dp"
+    android:padding="8dp"
+    android:drawablePadding="8dp"
+    android:drawableStart="@drawable/ic_bullet_point"
+    android:gravity="center_vertical"
+    android:textColor="@android:color/black"/>

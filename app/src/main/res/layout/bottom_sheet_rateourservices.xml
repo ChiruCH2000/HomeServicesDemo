@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/white"
+        android:elevation="4dp">
+        <LinearLayout
+            android:id="@+id/bottom_sheet_rateourservices_linearLayoutclose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CLOSE"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_regular"
+                android:layout_margin="10dp"
+                android:textColor="@color/black"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rate Our Service"
+        android:layout_margin="8dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"/>
+    <RatingBar
+        android:id="@+id/bottom_sheet_rateourservices_ratingbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:rating="0.0"/>
+    <EditText
+        android:id="@+id/bottom_sheet_rateourservices_editText_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:typeface="serif"
+        android:textSize="12sp"
+        android:autoSizeTextType="uniform"
+        android:hint="Your Address"
+        android:layout_margin="8dp"
+        android:background="@drawable/outline_bg"
+        android:fontFamily="@font/poppins_regular"
+        />
+    <Button
+        android:id="@+id/bottom_sheet_rateourservices_btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SUBMIT"
+        android:textColor="@color/white"/>
+</LinearLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="80dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="#F5F5F5">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            android:id="@+id/item_mbservices_item_imageView"
+            android:src="@mipmap/ic_launcher_round"/>
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/item_mbservices_item_textView_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textStyle="bold"
+        android:text="Home Services"
+        android:textColor="@color/black"
+        android:gravity="center"/>
+    <TextView
+        android:id="@+id/item_mbservices_item_textView_mrp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0000"
+        android:textColor="@color/black"
+        android:gravity="center"/>
+
+</LinearLayout>

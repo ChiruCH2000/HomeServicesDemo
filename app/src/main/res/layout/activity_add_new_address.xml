@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activites.AddNewAddressActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/headerlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/headerlayout_bg"
+        android:elevation="10dp">
+        <ImageView
+            android:id="@+id/activity_myAccount_img_backIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Add New Address "
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginStart="15dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="18sp"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/activity_myAccount_mapView"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="0dp" >
+        </com.google.android.gms.maps.MapView>
+        <ImageView
+            android:id="@+id/activity_myAccount_img_marker"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_pinpoint"/>
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/activity_add_new_address_txtAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="hi dude"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_margin="10dp"
+                android:fontFamily="@font/poppins_regular"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint=" House no / Floor no ">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_add_new_address_edtxt_houseNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_regular"
+                    app:layout_constraintTop_toBottomOf="@+id/login_name" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint=" LandMark(Optional) ">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_add_new_address_edtxt_landMark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_regular"
+                    app:layout_constraintTop_toBottomOf="@+id/login_name" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioGroup
+                    android:id="@+id/activity_add_new_address_radio_group_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/activity_profile_editText_phonenumber"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Save As"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_margin="4dp"/>
+
+                    <RadioButton
+                        android:id="@+id/activity_add_new_address_radio_home"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text=" Home "
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/poppins_regular"/>
+                    <RadioButton
+                        android:id="@+id/activity_add_new_address_radio_others"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text=" Others"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/poppins_regular"/>
+                </RadioGroup>
+                <!--<EditText
+                    android:id="@+id/activity_add_new_address_edittext_others"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Label"
+                    android:visibility="gone" />-->
+
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint=" LandMark(Optional) "
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activity_add_new_address_edittext_others"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_regular"
+                    app:layout_constraintTop_toBottomOf="@+id/login_name" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+              android:id="@+id/activity_add_new_address_btnSaveAddress"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Save this address "
+              android:background="@drawable/update_btn_baground"
+              android:textColor="@color/white"
+              android:textStyle="bold"
+              android:fontFamily="@font/poppins_regular"/>
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>
