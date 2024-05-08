@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homeservicesdemo.R;
+import com.example.homeservicesdemo.activites.ManageAddressActivity;
 import com.example.homeservicesdemo.activites.RateCardActivity;
 import com.example.homeservicesdemo.activites.ServicesActivity;
 import com.example.homeservicesdemo.helperclass.DataBaseHelper;
@@ -30,6 +31,7 @@ import com.example.homeservicesdemo.models.HowItWork;
 import com.example.homeservicesdemo.models.ServiceExcluded;
 import com.example.homeservicesdemo.models.ServiceIncluded;
 import com.example.homeservicesdemo.models.ServicesBean;
+import com.example.homeservicesdemo.models.VarientBean;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -94,7 +96,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Servic
         if (!TextUtils.isEmpty(warrenty)) {
             holder.textViewDays.setText("\u2022 " + warrenty);
         }
-// Check if the service is already in the cart
+        // Check if the service is already in the cart
         boolean isInCart = mDatabaseHelper.isServiceInCart(serviceItem.getService_id());
 
         if (isInCart) {
@@ -112,108 +114,43 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Servic
         }
         // Set image resource
         Picasso.get().load(serviceItem.getImage()).fit().centerCrop().into(holder.imageView);
-
-        /*holder.txtViewAdd.setOnClickListener(new View.OnClickListener() {
+        holder.txtViewAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get the selected service details
-                String serviceName = serviceItem.getName();
-                double servicePrice = Double.parseDouble(serviceItem.getPrice());
-                String categoryId = (serviceItem.getCategory_id());
-                String categoryName = serviceItem.getCategory_name();
-                String serviceId = (serviceItem.getService_id());
-                String subServiceId = (serviceItem.getSubcat_id());
-                String subServiceName = (serviceItem.getSubcategory_name());
-                // Check if the service is already in the cart
-                boolean isInCart = mDatabaseHelper.isServiceInCart(serviceId);
-                int quantity = mDatabaseHelper.getServiceQuantity(serviceId);
+                if (serviceItem.getVariants().isEmpty()) {
+                    String serviceName = serviceItem.getName();
+                    double servicePrice = Double.parseDouble(serviceItem.getPrice());
+                    String categoryId = serviceItem.getCategory_id();
+                    String categoryName = serviceItem.getCategory_name();
+                    String serviceId = serviceItem.getService_id();
+                    String subServiceId = serviceItem.getSubcat_id();
+                    String subServiceName = serviceItem.getSubcategory_name();
+                    String type = serviceItem.getType();
+                    ArrayList varient = serviceItem.getVariants();
 
+                    // Fetch the quantity of the service from the database
+                    int quantity = mDatabaseHelper.getServiceQuantity(serviceId);
 
-                if (isInCart) {
                     if (quantity > 0) {
                         // If the service is already in the cart, show llCount and hide txtViewAdd
                         holder.llCount.setVisibility(View.VISIBLE);
                         holder.txtViewAdd.setVisibility(View.GONE);
                         holder.txtCount.setText(String.valueOf(quantity));
-                        adapterCallback.onAdapterItemChanged();
+                    } else {
+                        // If the service is not in the cart, add it to the cart and update UI
+                        quantity = 1; // Default quantity
+                        mDatabaseHelper.addToCart(serviceId, categoryId, categoryName, serviceName, subServiceId, subServiceName, servicePrice, quantity, type, varient);
+                        // Hide llCount and show txtViewAdd
+                        holder.llCount.setVisibility(View.GONE);
+                        holder.txtViewAdd.setVisibility(View.VISIBLE);
+                        holder.txtCount.setText(String.valueOf(quantity));
                     }
-
-                } else {
-                    // If the service is not in the cart, add it to the cart and update UI
-                    quantity = 1; // Default quantity
-                    mDatabaseHelper.addToCart(serviceId, categoryId, categoryName, serviceName, subServiceId, subServiceName, servicePrice, quantity);
-                    // Hide llCount and show txtViewAdd
-                    holder.llCount.setVisibility(View.GONE);
-                    holder.txtViewAdd.setVisibility(View.VISIBLE);
-                    holder.txtCount.setText(String.valueOf(quantity));
-                    *//*adapterCallback.onAdapterItemChanged();*//*
+                    adapterCallback.onAdapterItemChanged();
+                }else{
+                    ((ServicesActivity)mContext).showDialogAddVarient(serviceItem);
                 }
-            }
-        });
 
-        holder.txtIncrement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int currentCount = Integer.parseInt(holder.txtCount.getText().toString());
-                currentCount++;
-                holder.txtCount.setText(String.valueOf(currentCount));
-                updateQuantityInDatabase(serviceItem.getService_id(), currentCount);
-                adapterCallback.onAdapterItemChanged();
-            }
-        });
-
-        holder.txtDecrement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int currentCount = Integer.parseInt(holder.txtCount.getText().toString());
-                if (currentCount > 0) {
-                    currentCount--;
-                    holder.txtCount.setText(String.valueOf(currentCount));
-                    updateQuantityInDatabase(serviceItem.getService_id(), currentCount);
-                }
-                // Check if the count is below 1
-                if (currentCount < 1) {
-                    // Remove the service from the table
-                    mDatabaseHelper.removeServiceFromCart(serviceItem.getService_id());
-                    // Update the UI dynamically
-                    holder.llCount.setVisibility(View.GONE);
-                    holder.txtViewAdd.setVisibility(View.VISIBLE);
-                }
-                adapterCallback.onAdapterItemChanged();
-            }
-        });*/
-        holder.txtViewAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the selected service details
-                String serviceName = serviceItem.getName();
-                double servicePrice = Double.parseDouble(serviceItem.getPrice());
-                String categoryId = serviceItem.getCategory_id();
-                String categoryName = serviceItem.getCategory_name();
-                String serviceId = serviceItem.getService_id();
-                String subServiceId = serviceItem.getSubcat_id();
-                String subServiceName = serviceItem.getSubcategory_name();
-                String type = serviceItem.getType();
-                ArrayList varient = serviceItem.getVariants();
-
-                // Fetch the quantity of the service from the database
-                int quantity = mDatabaseHelper.getServiceQuantity(serviceId);
-
-                if (quantity > 0) {
-                    // If the service is already in the cart, show llCount and hide txtViewAdd
-                    holder.llCount.setVisibility(View.VISIBLE);
-                    holder.txtViewAdd.setVisibility(View.GONE);
-                    holder.txtCount.setText(String.valueOf(quantity));
-                } else {
-                    // If the service is not in the cart, add it to the cart and update UI
-                    quantity = 1; // Default quantity
-                    mDatabaseHelper.addToCart(serviceId, categoryId, categoryName, serviceName, subServiceId, subServiceName, servicePrice, quantity,type,varient);
-                    // Hide llCount and show txtViewAdd
-                    holder.llCount.setVisibility(View.GONE);
-                    holder.txtViewAdd.setVisibility(View.VISIBLE);
-                    holder.txtCount.setText(String.valueOf(quantity));
-                }
-                adapterCallback.onAdapterItemChanged();
             }
         });
 

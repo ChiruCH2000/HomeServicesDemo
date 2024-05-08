@@ -4,8 +4,44 @@ public class VarientBean {
     public String variant_id;
     public String variant_name;
     public String variant_mrp;
+    public String varient_note1;
+    public String varient_note2;
+    public String image;
+    public String variant_rating;
     public String variant_price;
     public String variant_qty;
+
+    public String getVarient_note1() {
+        return varient_note1;
+    }
+
+    public void setVarient_note1(String varient_note1) {
+        this.varient_note1 = varient_note1;
+    }
+
+    public String getVarient_note2() {
+        return varient_note2;
+    }
+
+    public void setVarient_note2(String varient_note2) {
+        this.varient_note2 = varient_note2;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getVariant_rating() {
+        return variant_rating;
+    }
+
+    public void setVariant_rating(String variant_rating) {
+        this.variant_rating = variant_rating;
+    }
 
     public String getVariant_id() {
         return variant_id;

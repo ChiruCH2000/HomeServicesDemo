@@ -6,14 +6,21 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -22,6 +29,7 @@ import com.example.homeservicesdemo.R;
 import com.example.homeservicesdemo.adapters.CategoryItemAdapter;
 import com.example.homeservicesdemo.adapters.DiscountAdapter;
 import com.example.homeservicesdemo.adapters.ServicesAdapter;
+import com.example.homeservicesdemo.adapters.VarientAdapter;
 import com.example.homeservicesdemo.helperclass.DataBaseHelper;
 import com.example.homeservicesdemo.models.DiscountBean;
 import com.example.homeservicesdemo.models.HowItWork;
@@ -190,7 +198,7 @@ public class ServicesActivity extends AppCompatActivity implements CategoryItemA
                                 servicesBean.setType(serviceObject.getString("type"));
                                 servicesBean.setService_rating(serviceObject.optInt("service_rating"));
 
-                                servicesBean.setVariants((ArrayList<VarientBean>) serviceObject.get("variants"));
+                                servicesBean.setVariants(parseVarient(serviceObject.getJSONArray("variants")));
 
                                 servicesBean.setCompany_cover((ArrayList<Object>) serviceObject.get("company_cover"));
                                 servicesBean.setPlease_note((ArrayList<Object>) serviceObject.get("please_note"));
@@ -226,6 +234,31 @@ public class ServicesActivity extends AppCompatActivity implements CategoryItemA
             }
         });
     }
+    private ArrayList<VarientBean> parseVarient(JSONArray variants) {
+        ArrayList <VarientBean> varientList = new ArrayList<>();
+        try {
+            for (int i=0;i< variants.length();i++){
+                JSONObject jsonObject = variants.getJSONObject(i);
+
+                VarientBean varientBean = new VarientBean();
+                varientBean.setVariant_id(jsonObject.getString("variant_id"));
+                varientBean.setVariant_name(jsonObject.getString("variant_name"));
+                varientBean.setVariant_mrp(jsonObject.getString("variant_mrp"));
+                varientBean.setVariant_price(jsonObject.getString("variant_price"));
+                varientBean.setVarient_note1(jsonObject.getString("variant_note1"));
+                varientBean.setVarient_note2(jsonObject.getString("variant_note2"));
+                varientBean.setImage(jsonObject.getString("image"));
+                varientBean.setVariant_rating(jsonObject.getString("variant_rating"));
+
+                varientList.add(varientBean);
+
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return varientList;
+    }
+
     private ArrayList<HowItWork> parseHowItWork(JSONArray howItWorks) {
 
         ArrayList<HowItWork> howItWorkList = new ArrayList<>();
@@ -435,5 +468,49 @@ public class ServicesActivity extends AppCompatActivity implements CategoryItemA
     public void onAdapterItemChanged() {
         // Implement your logic to refresh the activity content
         updateActivityContent();
+    }
+
+    public void showDialogAddVarient(ServicesBean serviceItem) {
+        final Dialog dialog = new Dialog(ServicesActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_add_varient);
+
+        LinearLayout mllClose;
+
+        TextView mtxtTitle,mtxtRating,mtxtPrice,mtxtTotalPrize,mtxtdone;
+
+        RecyclerView mVarientRecyclerView;
+        ArrayList<VarientBean> mVarient = serviceItem.getVariants();
+
+        mllClose = dialog.findViewById(R.id.bottom_sheet_add_varient_linearLayoutclose);
+
+        mtxtTitle = dialog.findViewById(R.id.bottom_sheet_add_varient_textView_name);
+        mtxtPrice = dialog.findViewById(R.id.bottom_sheet_add_varient_textview_price);
+        mtxtRating = dialog.findViewById(R.id.bottom_sheet_add_varient_textview_rating);
+        mtxtTotalPrize = dialog.findViewById(R.id.bottom_sheet_add_varient_textView_total_amount);
+        mtxtdone = dialog.findViewById(R.id.bottom_sheet_add_varient_textView_done);
+
+        mVarientRecyclerView = dialog.findViewById(R.id.bottom_sheet_add_varient_recyclerViewVarient);
+
+        VarientAdapter varientAdapter = new VarientAdapter(ServicesActivity.this, mVarient, new DataBaseHelper(ServicesActivity.this), ServicesActivity.this);
+        mVarientRecyclerView.setLayoutManager(new LinearLayoutManager(ServicesActivity.this));
+        mVarientRecyclerView.setAdapter(varientAdapter);
+
+        mtxtTitle.setText(serviceItem.getCategory_name());
+        mtxtPrice.setText("₹"+serviceItem.getPrice());
+        mtxtRating.setText(serviceItem.getService_rating());
+
+        mllClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.show();
+
     }
 }

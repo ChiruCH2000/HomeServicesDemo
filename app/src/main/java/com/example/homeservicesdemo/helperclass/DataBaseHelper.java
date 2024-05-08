@@ -36,11 +36,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String KEY_SUB_SERVICE_NAME="sub_service_name";
     private static final String KEY_PRICE = "price";
     private static final String KEY_QUANTITY = "quantity";
-
+    private static final String KEY_TYPE = "type";
+    private static final ArrayList KEY_VARIENT = "varient";
     public DataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CART_ITEMS_TABLE = "CREATE TABLE " + TABLE_CART_ITEMS + "("
