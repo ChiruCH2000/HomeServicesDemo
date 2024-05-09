@@ -71,6 +71,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 mcontext.startActivity(intent);
             }
         });
+
     }
 
     @Override

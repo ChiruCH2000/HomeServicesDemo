@@ -17,7 +17,9 @@ public class SelectedServiceDetails {
     private double totalPrice;
 
     public String type;
-    public ArrayList<VarientBean> variant;
+    public String variantId;
+    public String variantName;
+    public String variantPrice;
 
     public String getType() {
         return type;
@@ -27,12 +29,28 @@ public class SelectedServiceDetails {
         this.type = type;
     }
 
-    public ArrayList<VarientBean> getVariant() {
-        return variant;
+    public String getVariantId() {
+        return variantId;
     }
 
-    public void setVariant(ArrayList<VarientBean> variant) {
-        this.variant = variant;
+    public void setVariantId(String variantId) {
+        this.variantId = variantId;
+    }
+
+    public String getVariantName() {
+        return variantName;
+    }
+
+    public void setVariantName(String variantName) {
+        this.variantName = variantName;
+    }
+
+    public String getVariantPrice() {
+        return variantPrice;
+    }
+
+    public void setVariantPrice(String variantPrice) {
+        this.variantPrice = variantPrice;
     }
 
     public int getId() {

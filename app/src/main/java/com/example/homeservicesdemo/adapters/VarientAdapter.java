@@ -1,6 +1,7 @@
 package com.example.homeservicesdemo.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homeservicesdemo.R;
 import com.example.homeservicesdemo.helperclass.DataBaseHelper;
+import com.example.homeservicesdemo.models.ServicesBean;
 import com.example.homeservicesdemo.models.VarientBean;
 
 import java.util.ArrayList;
@@ -21,10 +23,12 @@ public class VarientAdapter extends RecyclerView.Adapter<VarientAdapter.ViewHold
     private ArrayList<VarientBean> mVarient;
     private DataBaseHelper mDatabaseHelper;
     private ServicesAdapter.AdapterCallback adapterCallback;
-    public VarientAdapter(Context mContext, ArrayList<VarientBean> mVarient, DataBaseHelper databaseHelper, Context adapterCallback) {
+    private ServicesBean serviceBean;
+    public VarientAdapter(Context mContext, ArrayList<VarientBean> mVarient, ServicesBean serviceBean, DataBaseHelper databaseHelper, Context adapterCallback) {
         this.mVarient =mVarient;
         this.mcontext =mContext;
         this.mDatabaseHelper=databaseHelper;
+        this.serviceBean = serviceBean;
         this.adapterCallback = (ServicesAdapter.AdapterCallback) adapterCallback;
         notifyDataSetChanged();
     }
@@ -41,18 +45,24 @@ public class VarientAdapter extends RecyclerView.Adapter<VarientAdapter.ViewHold
         VarientBean varientBean = mVarient.get(position);
 
         holder.mtxtViewTitle.setText(varientBean.getVariant_name());
-        holder.mtxtViewPrice.setText(varientBean.getVariant_price());
+        holder.mtxtViewPrice.setText("₹"+varientBean.getVariant_price());
         holder.mtxtViewRating.setText(varientBean.getVariant_rating());
-        holder.mtxtViewNote1.setText(varientBean.getVarient_note1());
-        holder.mtxtViewNote2.setText(varientBean.getVarient_note2());
+        String note1 = varientBean.getVarient_note1();
+        if (!TextUtils.isEmpty(note1)) {
+            holder.mtxtViewNote1.setText("\u2022 " + note1);
+        }
+        String note2 = varientBean.getVarient_note2();
+        if (!TextUtils.isEmpty(note2)) {
+            holder.mtxtViewNote2.setText("\u2022 " + note2);
+        }
 
-        boolean isInCart = mDatabaseHelper.isVarientInCart(varientBean.getVariant_id());
-
+        boolean isInCart = mDatabaseHelper.isVarientInCart(serviceBean.getService_id());
+        String varientId = varientBean.getVariant_id();
         if (isInCart) {
             // If the service is already in the cart, show countLL and hide txtAdd
             holder.mllcount.setVisibility(View.VISIBLE);
             holder.mtxtAdd.setVisibility(View.GONE);
-            int quantity = mDatabaseHelper.getServiceQuantity(serviceItem.getService_id());
+            int quantity = mDatabaseHelper.getVarientQuantity(varientId);
             holder.mtxtcount.setText(String.valueOf(quantity));
             adapterCallback.onAdapterItemChanged();
         } else {
@@ -64,11 +74,74 @@ public class VarientAdapter extends RecyclerView.Adapter<VarientAdapter.ViewHold
         holder.mtxtAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String serviceName = serviceBean.getName();
+                double servicePrice = Double.parseDouble(serviceBean.getPrice());
+                String categoryId = serviceBean.getCategory_id();
+                String categoryName = serviceBean.getCategory_name();
+                String serviceId = serviceBean.getService_id();
+                String subServiceId = serviceBean.getSubcat_id();
+                String subServiceName = serviceBean.getSubcategory_name();
+                String type = serviceBean.getType();
+                String varientId = varientBean.getVariant_id();
+                String varientName = varientBean.getVariant_name();
+                Double varientPrice = Double.valueOf(varientBean.getVariant_price());
 
+                // Fetch the quantity of the varient from the database
+                int quantity = mDatabaseHelper.getVarientQuantity(varientId);
+
+                if (quantity > 0) {
+                    // If the varient is already in the cart, show llCount and hide txtViewAdd
+                    holder.mllcount.setVisibility(View.VISIBLE);
+                    holder.mtxtAdd.setVisibility(View.GONE);
+                    holder.mtxtcount.setText(String.valueOf(quantity));
+                } else {
+                    // If the varient is not in the cart, add it to the cart and update UI
+                    quantity = 1; // Default quantity
+                    mDatabaseHelper.addToCartWithVariant(serviceId, categoryId, categoryName, serviceName, subServiceId, subServiceName, servicePrice, quantity, type,varientId,varientName,varientPrice);
+                    // Hide llCount and show txtViewAdd
+                    holder.mllcount.setVisibility(View.GONE);
+                    holder.mtxtAdd.setVisibility(View.VISIBLE);
+                    holder.mtxtcount.setText(String.valueOf(quantity));
+                }
+                adapterCallback.onAdapterItemChanged();
             }
         });
-    }
+        holder.mtxtplus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentCount = Integer.parseInt(holder.mtxtcount.getText().toString());
+                currentCount++;
+                holder.mtxtcount.setText(String.valueOf(currentCount));
+                updateQuantityInDatabase(varientBean.getVariant_id(), currentCount);
+                adapterCallback.onAdapterItemChanged();
+            }
+        });
 
+        // Decrement button click listener
+        holder.mtxtminus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentCount = Integer.parseInt(holder.mtxtcount.getText().toString());
+                if (currentCount > 0) {
+                    currentCount--;
+                    holder.mtxtcount.setText(String.valueOf(currentCount));
+                    updateQuantityInDatabase(varientBean.getVariant_id(), currentCount);
+                }
+                // If the count is below 1, remove the service from the table
+                if (currentCount < 1) {
+                    mDatabaseHelper.removeServiceFromCart(varientBean.getVariant_id());
+                    holder.mllcount.setVisibility(View.GONE);
+                    holder.mtxtAdd.setVisibility(View.VISIBLE);
+                }
+                adapterCallback.onAdapterItemChanged();
+            }
+        });
+
+    }
+    private void updateQuantityInDatabase(String varientId, int newQuantity) {
+        // Update quantity in the database
+        mDatabaseHelper.updateQuantity(Integer.parseInt(varientId), newQuantity);
+    }
     @Override
     public int getItemCount() {
         return mVarient.size();

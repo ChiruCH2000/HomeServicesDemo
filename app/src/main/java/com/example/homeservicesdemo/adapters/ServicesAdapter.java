@@ -127,7 +127,6 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Servic
                     String subServiceId = serviceItem.getSubcat_id();
                     String subServiceName = serviceItem.getSubcategory_name();
                     String type = serviceItem.getType();
-                    ArrayList varient = serviceItem.getVariants();
 
                     // Fetch the quantity of the service from the database
                     int quantity = mDatabaseHelper.getServiceQuantity(serviceId);
@@ -140,7 +139,7 @@ public class ServicesAdapter extends RecyclerView.Adapter<ServicesAdapter.Servic
                     } else {
                         // If the service is not in the cart, add it to the cart and update UI
                         quantity = 1; // Default quantity
-                        mDatabaseHelper.addToCart(serviceId, categoryId, categoryName, serviceName, subServiceId, subServiceName, servicePrice, quantity, type, varient);
+                        mDatabaseHelper.addToCart(serviceId, categoryId, categoryName, serviceName, subServiceId, subServiceName, servicePrice, quantity, type);
                         // Hide llCount and show txtViewAdd
                         holder.llCount.setVisibility(View.GONE);
                         holder.txtViewAdd.setVisibility(View.VISIBLE);

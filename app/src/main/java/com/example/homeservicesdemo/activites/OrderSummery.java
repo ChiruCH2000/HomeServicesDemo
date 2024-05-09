@@ -143,7 +143,7 @@ public class OrderSummery extends AppCompatActivity implements SelectedServiceAd
                 serviceObject.put("qty", service.getQuantity());
 
                 JSONArray variantArray = new JSONArray();
-                List<VarientBean> variants = service.getVariant();
+                List<VarientBean> variants = service.getVariantId();
                 if (variants != null) {
                     for (VarientBean variant : variants) {
                         JSONObject variantObject = new JSONObject();

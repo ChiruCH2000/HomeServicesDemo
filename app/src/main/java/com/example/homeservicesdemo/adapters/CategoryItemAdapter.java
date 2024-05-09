@@ -42,7 +42,9 @@ public class CategoryItemAdapter extends RecyclerView.Adapter<CategoryItemAdapte
         SubCategoryBean subCategoryBean = msubCategoryItems.get(position);
 
         // Bind data to views
-        Picasso.get().load(subCategoryBean.getImage()).fit().into(holder.imageView);
+        if (!subCategoryBean.getImage().isEmpty()) {
+            Picasso.get().load(subCategoryBean.getImage()).fit().into(holder.imageView);
+        }
         holder.textViewTitle.setText(subCategoryBean.getSubcategory_name());
 
         holder.linearlayout.setOnClickListener(new View.OnClickListener() {

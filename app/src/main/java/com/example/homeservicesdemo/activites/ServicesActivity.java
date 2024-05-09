@@ -200,10 +200,10 @@ public class ServicesActivity extends AppCompatActivity implements CategoryItemA
 
                                 servicesBean.setVariants(parseVarient(serviceObject.getJSONArray("variants")));
 
-                                servicesBean.setCompany_cover((ArrayList<Object>) serviceObject.get("company_cover"));
+                                /*servicesBean.setCompany_cover((ArrayList<Object>) serviceObject.get("company_cover"));
                                 servicesBean.setPlease_note((ArrayList<Object>) serviceObject.get("please_note"));
                                 servicesBean.setCustomer_reviews((ArrayList<Object>) serviceObject.get("customer_reviews"));
-                                servicesBean.setAbout_service((ArrayList<Object>) serviceObject.get("about_service"));
+                                servicesBean.setAbout_service((ArrayList<Object>) serviceObject.get("about_service"));*/
 
                                 servicesBean.setService_included(parseServiceIncluded(serviceObject.getJSONArray("service_included")));
                                 servicesBean.setService_excluded(parseServiceExcluded(serviceObject.getJSONArray("service_excluded")));
@@ -492,13 +492,13 @@ public class ServicesActivity extends AppCompatActivity implements CategoryItemA
 
         mVarientRecyclerView = dialog.findViewById(R.id.bottom_sheet_add_varient_recyclerViewVarient);
 
-        VarientAdapter varientAdapter = new VarientAdapter(ServicesActivity.this, mVarient, new DataBaseHelper(ServicesActivity.this), ServicesActivity.this);
+        VarientAdapter varientAdapter = new VarientAdapter(ServicesActivity.this, mVarient,serviceItem, new DataBaseHelper(ServicesActivity.this), ServicesActivity.this);
         mVarientRecyclerView.setLayoutManager(new LinearLayoutManager(ServicesActivity.this));
         mVarientRecyclerView.setAdapter(varientAdapter);
 
         mtxtTitle.setText(serviceItem.getCategory_name());
         mtxtPrice.setText("₹"+serviceItem.getPrice());
-        mtxtRating.setText(serviceItem.getService_rating());
+        /*mtxtRating.setText(serviceItem.getService_rating());*/
 
         mllClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -511,6 +511,5 @@ public class ServicesActivity extends AppCompatActivity implements CategoryItemA
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
-
     }
 }
