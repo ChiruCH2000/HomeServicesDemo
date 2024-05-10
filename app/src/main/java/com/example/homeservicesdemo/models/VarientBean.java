@@ -1,6 +1,8 @@
 package com.example.homeservicesdemo.models;
 
-public class VarientBean {
+import java.util.ArrayList;
+
+public class VarientBean extends ArrayList<VarientBean> {
     public String variant_id;
     public String variant_name;
     public String variant_mrp;

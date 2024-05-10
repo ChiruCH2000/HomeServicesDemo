@@ -17,9 +17,15 @@ public class SelectedServiceDetails {
     private double totalPrice;
 
     public String type;
-    public String variantId;
-    public String variantName;
-    public String variantPrice;
+    public ArrayList<VarientBean> varientList;
+
+    public ArrayList<VarientBean> getVarientList() {
+        return varientList;
+    }
+
+    public void setVarientList(VarientBean varientList) {
+        this.varientList = varientList;
+    }
 
     public String getType() {
         return type;
@@ -27,30 +33,6 @@ public class SelectedServiceDetails {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getVariantId() {
-        return variantId;
-    }
-
-    public void setVariantId(String variantId) {
-        this.variantId = variantId;
-    }
-
-    public String getVariantName() {
-        return variantName;
-    }
-
-    public void setVariantName(String variantName) {
-        this.variantName = variantName;
-    }
-
-    public String getVariantPrice() {
-        return variantPrice;
-    }
-
-    public void setVariantPrice(String variantPrice) {
-        this.variantPrice = variantPrice;
     }
 
     public int getId() {

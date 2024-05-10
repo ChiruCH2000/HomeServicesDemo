@@ -116,7 +116,6 @@ public class VarientAdapter extends RecyclerView.Adapter<VarientAdapter.ViewHold
                 adapterCallback.onAdapterItemChanged();
             }
         });
-
         // Decrement button click listener
         holder.mtxtminus.setOnClickListener(new View.OnClickListener() {
             @Override

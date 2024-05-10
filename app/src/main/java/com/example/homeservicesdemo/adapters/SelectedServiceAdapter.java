@@ -72,7 +72,6 @@ public class SelectedServiceAdapter extends RecyclerView.Adapter<SelectedService
                 else mDatabaseHelper.removeServiceFromCart(String.valueOf(selectedServiceDetails.getServiceId()));
             }
         });
-
         holder.mtextViewIncrement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,11 +99,9 @@ public class SelectedServiceAdapter extends RecyclerView.Adapter<SelectedService
             return 0; // or any default value you want to return if the list is null
         }
     }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView mtextViewtitle,mtextViewDecrement,mtextViewIncrement,mtextViewCount,mtextViewPrice;
         public ViewHolder(@NonNull View itemView) {
-
             super(itemView);
 
             mtextViewtitle=itemView.findViewById(R.id.item_order_summery_textView_item_name);

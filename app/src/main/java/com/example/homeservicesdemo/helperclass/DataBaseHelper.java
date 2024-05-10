@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.homeservicesdemo.models.VarientBean;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -178,7 +180,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 cartItem.setId(String.valueOf(cursor.getInt(cursor.getColumnIndex(KEY_ID))));
                 cartItem.setCategoryId(String.valueOf(cursor.getInt(cursor.getColumnIndex(KEY_CATEGORY_ID))));
                 cartItem.setCategoryName(cursor.getString(cursor.getColumnIndex(KEY_CATEGORY_NAME)));
+
                 // Fetch services list based on category ID
+
                 int categoryId = cursor.getInt(cursor.getColumnIndex(KEY_CATEGORY_ID));
                 List<SelectedServiceDetails> selectedServices = getSelectedCategoryServices(categoryId);
 
@@ -206,7 +210,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 cartItemsList.add(cartItem);
             } while (cursor.moveToNext());
         }
-
         // Close the cursor and database connection
         cursor.close();
         db.close();
@@ -229,7 +232,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             totalPrice = cursor.getDouble(cursor.getColumnIndex("total"));
         }
-
         cursor.close();
         db.close();
 
@@ -256,6 +258,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 selectedServiceDetails.setSubServiceName(cursor.getString(cursor.getColumnIndex(KEY_SUB_SERVICE_NAME)));
                 selectedServiceDetails.setQuantity(cursor.getInt(cursor.getColumnIndex(KEY_QUANTITY))); // Retrieve quantity
                 selectedServiceDetails.setPrice(cursor.getDouble(cursor.getColumnIndex(KEY_PRICE))); // Retrieve price
+
+                if (cursor.getColumnIndex(KEY_VARIENT_ID) != -1 && cursor.getColumnIndex(KEY_VARIENT_NAME) != -1 && cursor.getColumnIndex(KEY_VARIENT_PRICE) != -1) {
+
+                    VarientBean variant = new VarientBean();
+                    variant.setVariant_id(String.valueOf(cursor.getInt(cursor.getColumnIndex(KEY_VARIENT_ID))));
+                    variant.setVariant_name(cursor.getString(cursor.getColumnIndex(KEY_VARIENT_NAME)));
+                    variant.setVariant_price(String.valueOf(cursor.getDouble(cursor.getColumnIndex(KEY_VARIENT_PRICE))));
+                    variant.setVariant_qty(String.valueOf(cursor.getInt(getVarientQuantity(KEY_VARIENT_ID))));
+                    variant.setVariant_mrp(String.valueOf(cursor.getColumnIndex(KEY_VARIENT_PRICE)));
+
+                    selectedServiceDetails.setVarientList(variant);
+
+                }
 
                 selectedcategoryServices.add(selectedServiceDetails);
                 
@@ -305,64 +320,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
         return quantity;
     }
-    /*public void addToCartWithVarient(String serviceId, String categoryId,String categoryName, String serviceName,String subserviceId,String subServiceName, double servicePrice, int quantity,String type,String varientId,String varientName,double varientPrice) {
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        // Check if cart entry already exists for the category
-        Cursor cartCursor = db.rawQuery("SELECT * FROM " + TABLE_CART_ITEMS + " WHERE " + KEY_CATEGORY_ID + " = ?", new String[]{categoryId});
-        double totalPrice = varientPrice * quantity; // Calculate total price for this service
-        if (cartCursor.getCount() == 0) {
-            // If cart entry doesn't exist, create a new one
-            ContentValues cartValues = new ContentValues();
-            cartValues.put(KEY_CATEGORY_ID, categoryId);
-            cartValues.put(KEY_CATEGORY_NAME, categoryName);
-            cartValues.put(KEY_TOTAL_PRICE, totalPrice); // Set initial total price to service price * quantity
-            db.insert(TABLE_CART_ITEMS, null, cartValues);
-        } else {
-            // If cart entry already exists, update the total price
-            cartCursor.moveToFirst();
-            double currentTotalPrice = cartCursor.getDouble(cartCursor.getColumnIndex(KEY_TOTAL_PRICE));
-            totalPrice += currentTotalPrice; // Add current total price to the new service price
-            ContentValues cartUpdateValues = new ContentValues();
-            cartUpdateValues.put(KEY_TOTAL_PRICE, totalPrice);
-            db.update(TABLE_CART_ITEMS, cartUpdateValues, KEY_CATEGORY_ID + " = ?", new String[]{categoryId});
-        }
-
-        cartCursor.close();
-        ContentValues values = new ContentValues();
-        values.put(KEY_SERVICE_ID, serviceId);
-        values.put(KEY_CATEGORY_ID, categoryId);
-        values.put(KEY_CATEGORY_NAME,categoryName);
-        values.put(KEY_SERVICE_NAME, serviceName);
-        values.put(KEY_SUB_SERVICE_ID, subserviceId);
-        values.put(KEY_SUB_SERVICE_NAME,subServiceName);
-        values.put(KEY_PRICE, servicePrice);
-        values.put(KEY_QUANTITY, quantity);
-        values.put(KEY_TYPE,type);
-        values.put(KEY_VARIENT_ID,varientId);
-        values.put(KEY_VARIENT_NAME,varientName);
-        values.put(KEY_VARIENT_PRICE,varientPrice);
-        long rowId = db.insert(TABLE_SELECTED_SERVICES, null, values);
-        db.close();
-    }
-    public int getVarientQuantity(String variantId) {
-        int quantity =0;
-        return quantity;
-    }
-    public boolean isVarientInCart(String variantId){
-
-        SQLiteDatabase db =this.getReadableDatabase();
-        boolean isInCart = false;
-        String query = " SELECT COUNT(*) FROM " + TABLE_SELECTED_SERVICES +
-                " WHERE " + KEY_VARIENT_ID + " = ?";
-
-        db.close();
-
-        return isInCart;
-    }*/
     private void updateOrInsertCartEntry(String categoryId, String categoryName, double totalPrice) {
+
         SQLiteDatabase db = this.getWritableDatabase();
+
         try {
             // Check if cart entry already exists for the category
             Cursor cartCursor = db.rawQuery("SELECT * FROM " + TABLE_CART_ITEMS + " WHERE " + KEY_CATEGORY_ID + " = ?", new String[]{categoryId});
@@ -389,7 +350,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
-
     public void addToCartWithVariant(String serviceId, String categoryId, String categoryName, String serviceName, String subserviceId, String subServiceName, double servicePrice, int quantity, String type, String varientId, String varientName, double varientPrice) {
         SQLiteDatabase db = this.getWritableDatabase();
 
